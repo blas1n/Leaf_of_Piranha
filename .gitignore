@@ -408,6 +408,10 @@ ASALocalRun/
 
 # C extensions
 
+# Solution
+*.pyproj
+*.sln
+
 # Distribution / packaging
 .Python
 build/
