@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Leaf_of_Piranha
 {
     public partial class Form1 : Form
     {
+        private Leaf[] leaves = null;
         private static int limitTime;
         private static bool alreadyInit;
+        private const int numOfPullLeaf = 30;
         private int readyTime = 3;
 
         public Form1()
@@ -23,6 +20,14 @@ namespace Leaf_of_Piranha
             {
                 limitTime = LimitBar.Maximum;
                 alreadyInit = true;
+
+                leaves = new Leaf[numOfPullLeaf];
+
+                for (int i = 0; i < numOfPullLeaf; i++)
+                {
+                    leaves[i] = new Leaf();
+                    Controls.Add(leaves[i]);
+                }
             }
         }
 
@@ -34,8 +39,14 @@ namespace Leaf_of_Piranha
 
         private void GenerateTimer_Tick(object sender, EventArgs e)
         {
-            Leaf leaf = new Leaf();
-            this.Controls.Add(leaf);
+            for (int i = 0; i < numOfPullLeaf; i++)
+            {
+                if (!leaves[i].Visible)
+                {
+                    leaves[i].PoolLeaf();
+                    break;
+                }
+            }
         }
 
         private void ReadyTimer_Tick(object sender, EventArgs e)
@@ -73,7 +84,10 @@ namespace Leaf_of_Piranha
     }
 
     public class Leaf : PictureBox {
-        Form1 form = new Form1();
+        private Form1 form = new Form1();
+        private Timer timer = new Timer();
+        private static Random random = new Random();
+        private int[] spawnPoint = { 30, 110, 190, 270, 350, 430, 510, 590 };
 
         public Leaf()
         {
@@ -81,17 +95,47 @@ namespace Leaf_of_Piranha
             Image = Properties.Resources.LeafResc;
             SizeMode = PictureBoxSizeMode.StretchImage;
             Click += Leaf_Click;
-            Size = new Size(40, 30);
+            Size = new Size(50, 40);
+            LeafActive = false;
+            timer.Interval = 10;
+            timer.Tick += Timer_Tick;  
+        }
 
-            Random random = new Random();
-            Location = new Point(random.Next(50, 650), 0);
+        public void PoolLeaf()
+        {
+            Location = new Point(spawnPoint[random.Next(0, 8)], -20);
+            LeafActive = true;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            Point point = Location;
+            point.Y += 2;
+            Location = point;
+
+            if (Location.Y > 300)
+            {
+                point.Y = -20;
+                Location = point;
+                LeafActive = false;
+            }
         }
 
         private void Leaf_Click(object sender, EventArgs e)
         {
-            Visible = false;
-            Enabled = false;
+            LeafActive = false;
             form.ExtensionLimit(30);
+        }
+   
+        private bool LeafActive
+        {
+            set {
+                Visible = value;
+                Enabled = value;
+
+                if (value) timer.Start();
+                else timer.Stop();
+            }
         }
     }
 }
