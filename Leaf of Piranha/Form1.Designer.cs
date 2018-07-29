@@ -68,6 +68,7 @@
             // 
             // GenerateTimer
             // 
+            this.GenerateTimer.Interval = 500;
             this.GenerateTimer.Tick += new System.EventHandler(this.GenerateTimer_Tick);
             // 
             // ReadyTimer
@@ -96,7 +97,7 @@
             this.Controls.Add(this.GameSetText);
             this.Controls.Add(this.ReadyText);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Leaf of Piranha";
             this.ResumeLayout(false);
             this.PerformLayout();
 

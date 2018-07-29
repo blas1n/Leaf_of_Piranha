@@ -12,13 +12,18 @@ namespace Leaf_of_Piranha
 {
     public partial class Form1 : Form
     {
-        int limitTime;
-        int readyTime = 3;
+        private static int limitTime;
+        private static bool alreadyInit;
+        private int readyTime = 3;
 
         public Form1()
         {
             InitializeComponent();
-            limitTime = LimitBar.Maximum;
+            if (!alreadyInit)
+            {
+                limitTime = LimitBar.Maximum;
+                alreadyInit = true;
+            }
         }
 
         private void GameTimer_Tick(object sender, EventArgs e)
@@ -29,7 +34,8 @@ namespace Leaf_of_Piranha
 
         private void GenerateTimer_Tick(object sender, EventArgs e)
         {
-            // 나뭇잎 생성
+            Leaf leaf = new Leaf();
+            this.Controls.Add(leaf);
         }
 
         private void ReadyTimer_Tick(object sender, EventArgs e)
@@ -55,8 +61,37 @@ namespace Leaf_of_Piranha
         {
             GameTimer.Stop();
             GenerateTimer.Stop();
-            LimitBar.Visible = false;
             GameSetText.Visible = true;
+        }
+
+        public void ExtensionLimit(int extenstionTime)
+        {
+            if (limitTime + extenstionTime > LimitBar.Maximum)
+                limitTime = LimitBar.Maximum;
+            else limitTime += extenstionTime;
+        }
+    }
+
+    public class Leaf : PictureBox {
+        Form1 form = new Form1();
+
+        public Leaf()
+        {
+            Name = "Leaf";
+            Image = Properties.Resources.LeafResc;
+            SizeMode = PictureBoxSizeMode.StretchImage;
+            Click += Leaf_Click;
+            Size = new Size(40, 30);
+
+            Random random = new Random();
+            Location = new Point(random.Next(50, 650), 0);
+        }
+
+        private void Leaf_Click(object sender, EventArgs e)
+        {
+            Visible = false;
+            Enabled = false;
+            form.ExtensionLimit(30);
         }
     }
 }
