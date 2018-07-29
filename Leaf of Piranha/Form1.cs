@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,6 +15,7 @@ namespace Leaf_of_Piranha
         public Form1()
         {
             InitializeComponent();
+
             if (!alreadyInit)
             {
                 limitTime = LimitBar.Maximum;
@@ -87,13 +87,14 @@ namespace Leaf_of_Piranha
         private Form1 form = new Form1();
         private Timer timer = new Timer();
         private static Random random = new Random();
-        private int[] spawnPoint = { 30, 110, 190, 270, 350, 430, 510, 590 };
+        private int[] spawnPoint = { 95, 134, 173, 212, 251, 290, 329, 368, 407, 446, 485 };
 
         public Leaf()
         {
             Name = "Leaf";
             Image = Properties.Resources.LeafResc;
             SizeMode = PictureBoxSizeMode.StretchImage;
+            BackColor = Color.MintCream;
             Click += Leaf_Click;
             Size = new Size(50, 40);
             LeafActive = false;
@@ -103,14 +104,14 @@ namespace Leaf_of_Piranha
 
         public void PoolLeaf()
         {
-            Location = new Point(spawnPoint[random.Next(0, 8)], -20);
+            Location = new Point(spawnPoint[random.Next(0, 11)], -20);
             LeafActive = true;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             Point point = Location;
-            point.Y += 2;
+            point.Y += 3;
             Location = point;
 
             if (Location.Y > 300)

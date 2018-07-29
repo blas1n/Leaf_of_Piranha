@@ -79,7 +79,7 @@
             // 
             // LimitBar
             // 
-            this.LimitBar.Location = new System.Drawing.Point(28, 24);
+            this.LimitBar.Location = new System.Drawing.Point(32, 503);
             this.LimitBar.Maximum = 500;
             this.LimitBar.Name = "LimitBar";
             this.LimitBar.Size = new System.Drawing.Size(724, 38);
